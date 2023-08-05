@@ -21,4 +21,4 @@ const api = async (req, res) => {
   }
 };
 
-export default api;
+module.exports = api;
