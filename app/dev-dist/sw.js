@@ -93,3 +93,26 @@ define(['./workbox-16108a29'], (function (workbox) { 'use strict';
   }));
 
 }));
+
+self.addEventListener("push", (event) => {
+  // 通知設定が行われているかをチェック
+  if (!self.Notification || self.Notification.permission !== "granted") {
+    // 通知設定が行われていなければ何もせず終了
+    console.log("not permitted");
+    return;
+  }
+  console.log("permitted");
+
+  // 送信されたデータを取得
+  if (event.data) {
+    const data = JSON.parse(event.data.text());
+
+    event.waitUntil(
+      self.registration.showNotification("Ramen Sender", {
+        body: data.body,
+        image: data.image || undefined,
+        icon: data.image || undefined,
+      })
+    );
+  }
+});
