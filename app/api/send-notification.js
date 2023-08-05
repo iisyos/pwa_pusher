@@ -13,7 +13,12 @@ const api = async (req, res) => {
   const subscription = req.body.subscription;
   const payload = "Hello!";
   try {
-    await webPush.sendNotification(subscription, payload);
+    await webPush.sendNotification(
+      subscription,
+      JSON.stringify({
+        body: payload,
+      })
+    );
     res.status(200).json({ message: 'Notification sent.' });
   } catch (error) {
     console.error('Error sending notification, reason: ', error);

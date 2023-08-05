@@ -33,7 +33,7 @@ function App() {
           console.log(subscription);
           if (subscription) {
             const result = await axios
-              .post("http://localhost:3000/sendNotification", {
+              .post("/api/send-notification", {
                 subscription
               })
               console.log(result);
