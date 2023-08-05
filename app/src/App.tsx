@@ -1,24 +1,38 @@
-import { useState } from 'react'
-import './App.css'
+import { useCallback } from "react";
+
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const unregisterSubscription = useCallback(async () => {
+    if ("serviceWorker" in navigator) {
+      const registration = await navigator.serviceWorker.getRegistration();
+      if (registration != null) {
+        console.log(registration);
+        const subscription = await registration.pushManager.getSubscription();
+        console.log(subscription);
+        if (subscription) {
+          await subscription.unsubscribe();
+        }
+      }
+    }
+  }, []);
+
+  const registerSubscription = useCallback(async () => {
+    Notification.requestPermission(async (permission) => {
+      if (permission === "granted") {
+        console.log("Notification permission granted.");
+      }
+    });
+  }, []);
 
   return (
     <>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <button onClick={registerSubscription}>Subscribe</button>
+        <button onClick={unregisterSubscription}>Unsubscribe</button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
