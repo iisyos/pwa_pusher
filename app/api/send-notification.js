@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
-import { webPush } from 'web-push';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const webPush = require('web-push');
 
 
 webPush.setVapidDetails(
