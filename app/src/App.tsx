@@ -33,7 +33,7 @@ function App() {
           console.log(subscription);
           if (subscription) {
             const result = await axios
-              .post("/api/send-notification", {
+              .post("/api/sendNotification", {
                 subscription
               })
               console.log(result);
