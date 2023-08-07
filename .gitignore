@@ -1,1 +1,2 @@
-/restapi
+node_modules
+.env

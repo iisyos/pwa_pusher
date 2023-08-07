@@ -1,42 +1,31 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import "./App.css";
 import axios from "axios";
 
 function App() {
-  const [registerd, setRegisterd] = useState(false);
-
-  useEffect(() => {
-    console.log("registerd:", registerd);
-  }, [registerd]);
 
   const unregisterSubscription = useCallback(async () => {
     if ("serviceWorker" in navigator) {
       const registration = await navigator.serviceWorker.getRegistration();
       if (registration != null) {
-        console.log(registration);
         const subscription = await registration.pushManager.getSubscription();
-        console.log(subscription);
         if (subscription) {
           await subscription.unsubscribe();
         }
-        setRegisterd(false);
       }
     }
   }, []);
 
-    // プッシュ通知を送信する
     const sendSubscription = useCallback(async () => {
       if ("serviceWorker" in navigator) {
         const registration = await navigator.serviceWorker.getRegistration();
         if (registration) {
           const subscription = await registration.pushManager.getSubscription();
-          console.log(subscription);
           if (subscription) {
-            const result = await axios
-              .post("/api/send-notification", {
+            await axios
+              .post(import.meta.env.VITE_API_ENDPOINT, {
                 subscription
               })
-              console.log(result);
           }
         }
       }
@@ -68,12 +57,9 @@ function App() {
           };
 
           const registration = await navigator.serviceWorker.ready;
-          const pushSubscription = await registration.pushManager.subscribe(
+          await registration.pushManager.subscribe(
             options
           );
-          console.log(pushSubscription);
-          
-          setRegisterd(true);
         }
 
       }
